@@ -56,8 +56,6 @@ let server = net.createServer(client => {
           if (passwordAttempt === password) {
             clients[i].write(`You have been kicked from the server.`);
             broadcast(`${removeName} has been kicked from the chat. \n`, client)
-            // clients.splice(clients.indexOf(client), 1); 
-            // console.log(`Number of clients: ${clients.length}` + '\n')
             clients[i].emit("end");
             fs.appendFile('./chat.log', `${removeName} has been kicked out of the chat. \n`, () => {})
             return;
@@ -82,7 +80,6 @@ let server = net.createServer(client => {
                     message = dataArray.slice(2, dataArray.length).join(' ')
                     reciever.write(`Whisper from ${client.id}: ${message}\n`)
                     fs.appendFile('./chat.log', `Whisper from ${client.id} to ${reciever.id}: ${message}\n`, () => {})
-                    // console.log(`Whisper from ${client.id} to ${reciever.id}: ${message}\n`)
                 }
             }
         } else {
@@ -108,18 +105,8 @@ let server = net.createServer(client => {
             );
         }
       });
-    
-    
-
-    // client.on('end', () => {
-    //     broadcast(`${client.id} has left the chat. \n`, client)
-    //     clients.splice(clients.indexOf(client), 1); 
-    //     console.log(`Number of clients: ${clients.length}` + '\n')
-    //     fs.appendFile('./chat.log', `${client.id} has left the chat. \n`, () => {})
-    // })
     client.on("end", () => {
       console.log(`Disconnected: ${client.id}\n`);
-      // console.log(`: ${clients.length}`);
       let idx = clients.indexOf(client);
       clients = clients.filter((clientSock) => clientSock != client);
       client.destroy();
